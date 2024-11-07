@@ -8,6 +8,8 @@ public class Product {
     private final String name;
     private final String quantity;
     private String price;
+    private int promotionStockCount = 0;
+    private int normalStockCount = 0;
 
     public Product(String product) throws IOException {
         String[] productInfo = validate(product);
@@ -42,7 +44,7 @@ public class Product {
             throw new IllegalArgumentException("[ERROR] 존재하지 않는 상품입니다. 다시 입력해 주세요.");
         }
 
-        if (isExceedStock(oneProduct[1])) {
+        if (isStockLack(oneProduct)) {
             throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
         }
         return oneProduct;
@@ -55,8 +57,10 @@ public class Product {
 
         while ((food = reader.readLine()) != null) {
             String foodName = food.split(",")[0];
+            String foodPrice = food.split(",")[1];
 
             if (foodName.equals(productName)) {
+                price = foodPrice;
                 reader.close();
                 return true;
             }
@@ -65,21 +69,30 @@ public class Product {
         return false;
     }
 
-    private boolean isExceedStock(String productQuantity) throws IOException {
+    private boolean isStockLack(String[] productInfo) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/products.md")); //java 파일 경로 입력방법
         String food;
         reader.readLine();
+        int count = 0;
 
         while ((food = reader.readLine()) != null) {
+            String foodName = food.split(",")[0];
             String foodQuantity = food.split(",")[2];
-            if (Integer.parseInt(foodQuantity) < Integer.parseInt(productQuantity)) {
-                reader.close();
-                return false;
-            }
 
+            if (foodName.equals(productInfo[0]) & count == 0) {
+                promotionStockCount += Integer.parseInt(foodQuantity);
+            }
+            if (foodName.equals(productInfo[0]) & count == 1) {
+                normalStockCount += Integer.parseInt(foodQuantity);
+            }
+            count += 1;
+        }
+        if (promotionStockCount + normalStockCount < Integer.parseInt(productInfo[1])) {
+            reader.close();
+            return true;
         }
         reader.close();
-        return true;
+        return false;
     }
 
     public boolean isNameMatched(String foodName) {
@@ -99,7 +112,7 @@ public class Product {
             String[] foodInfo = food.split(",");
 
             if (foodInfo[0].equals(name)) {
-                if(foodInfo[3]!=null){
+                if (foodInfo[3] != null) {
                     reader.close();
                     return foodInfo[3];
                 }
@@ -109,7 +122,7 @@ public class Product {
         return "noPromotion";
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
