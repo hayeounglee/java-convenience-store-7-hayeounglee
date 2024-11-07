@@ -21,6 +21,16 @@ public class OutputView {
         System.out.println("안녕하세요. W편의점입니다.\n" +
                 "현재 보유하고 있는 상품입니다.\n");
 
+        BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/products.md")); //java 파일 경로 입력방법
+        String product;
 
+        reader.readLine();
+
+        while ((product = reader.readLine()) != null) {
+            String[] str = product.split(",");
+            System.out.printf("- %s %s원 %s개 %s", str[0], String.format(str[1]), str[2], str[3]); //null은 재고 없음으로 하기
+            System.out.println();
+        }
+        reader.close();
     }
 }
