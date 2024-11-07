@@ -10,6 +10,7 @@ public class Product {
     private String price;
     private int promotionStockCount = 0;
     private int normalStockCount = 0;
+    private String promotion = "null";
 
     public Product(String product) throws IOException {
         String[] productInfo = validate(product);
@@ -73,19 +74,20 @@ public class Product {
         BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/products.md")); //java 파일 경로 입력방법
         String food;
         reader.readLine();
-        int count = 0;
 
         while ((food = reader.readLine()) != null) {
             String foodName = food.split(",")[0];
             String foodQuantity = food.split(",")[2];
+            String foodPromotion = food.split(",")[3];
 
-            if (foodName.equals(productInfo[0]) & count == 0) {
+            if (foodName.equals(productInfo[0]) & !foodPromotion.equals("null")) {
                 promotionStockCount += Integer.parseInt(foodQuantity);
+                promotion = foodPromotion;
             }
-            if (foodName.equals(productInfo[0]) & count == 1) {
+            if (foodName.equals(productInfo[0]) & foodPromotion.equals("null")) {
                 normalStockCount += Integer.parseInt(foodQuantity);
+                promotion = foodPromotion;
             }
-            count += 1;
         }
         if (promotionStockCount + normalStockCount < Integer.parseInt(productInfo[1])) {
             reader.close();
@@ -102,28 +104,8 @@ public class Product {
         return false;
     }
 
-    public String getProductPromotion() throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/products.md")); //java 파일 경로 입력방법
-        String food;
-
-        reader.readLine();
-
-        while ((food = reader.readLine()) != null) {
-            String[] foodInfo = food.split(",");
-
-            if (foodInfo[0].equals(name)) {
-                if (foodInfo[3] != null) {
-                    reader.close();
-                    return foodInfo[3];
-                }
-            }
-        }
-        reader.close();
-        return "noPromotion";
-    }
-
-    public String getName() {
-        return name;
+    public String getPromotion() {
+        return promotion;
     }
 
 }
