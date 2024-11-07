@@ -76,8 +76,42 @@ public class Product {
                 reader.close();
                 return false;
             }
+
         }
         reader.close();
         return true;
     }
+
+    public boolean isNameMatched(String foodName) {
+        if (name.equals(foodName)) {
+            return true;
+        }
+        return false;
+    }
+
+    public String getProductPromotion() throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/products.md")); //java 파일 경로 입력방법
+        String food;
+
+        reader.readLine();
+
+        while ((food = reader.readLine()) != null) {
+            String[] foodInfo = food.split(",");
+
+            if (foodInfo[0].equals(name)) {
+                if(foodInfo[3]!=null){
+                    reader.close();
+                    return foodInfo[3];
+                }
+            }
+        }
+        reader.close();
+        return "noPromotion";
+    }
+
+    public String getName(){
+        return name;
+    }
+
 }
+
