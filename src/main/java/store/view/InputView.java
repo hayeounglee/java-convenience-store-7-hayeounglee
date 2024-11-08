@@ -14,16 +14,19 @@ public class InputView {
 
     public boolean getMembershipDiscountOrNot() {
         System.out.println("멤버십 할인을 받으시겠습니까? (Y/N)");
+        System.out.println();
         return getYesOrNo();
     }
 
     public boolean getAdditionalPurchase() {
         System.out.println("감사합니다. 구매하고 싶은 다른 상품이 있나요? (Y/N)");
+        System.out.println();
         return getYesOrNo();
     }
 
     public boolean getOneMoreFree(Product product) {
         System.out.printf("현재 %s은(는) 1개를 무료로 더 받을 수 있습니다. 추가하시겠습니까? (Y/N)", product.getName());
+        System.out.println();
         return getYesOrNo();
     }
 
@@ -42,7 +45,7 @@ public class InputView {
     private boolean getYesOrNo() {
         String input = Console.readLine();
         commonInputValidator.validateEmpty(input);
-        if (input == "Y") {
+        if (input.equals("Y")) {
             return true;
         }
         return false;
