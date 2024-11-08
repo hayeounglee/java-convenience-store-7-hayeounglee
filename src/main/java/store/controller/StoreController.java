@@ -27,17 +27,15 @@ public class StoreController {
 
 
         for (Product product : purchaseProducts.getPurchaseProducts()) {
-
             int countPurchasePromotion = 0;
             int countPurchaseNormal = 0;
             int giftCount = product.getGiftCount();
-
 
             if (!product.isAvailableOnlyPromotion()) { // 프로모션 제품만으로 안되는 경우
                 countPurchasePromotion = product.getPromotionStockCount();
                 countPurchaseNormal = product.getQuantity() - countPurchasePromotion;
 
-                if (product.countPromotionDisable() > 0) { // 프로모션 혜택을 받지 못하는 수량이 있는 경우
+                if (product.countPromotionDisable() > 0 & product.isPromotionProduct()) { // 프로모션 혜택을 받지 못하는 수량이 있는 경우
                     if (!inputView.getPurchaseOrNot(product.getName(), product.countPromotionDisable())) {
                         countPurchasePromotion = product.buyOnlyPromotion();
                         countPurchaseNormal = 0;
@@ -77,5 +75,9 @@ public class StoreController {
 //        if (inputView.getAdditionalPurchase()) {
 //            //게임 다시 시작
 //        }
+    }
+
+    private void generateReceipt(int stockCount, Product product, int giftCount){
+
     }
 }

@@ -175,6 +175,10 @@ public class Product {
         return false;
     }
 
+    public boolean isPromotionProduct(){
+        return !promotion.equals("null");
+    }
+
     public String getName() {
         return name;
     }
