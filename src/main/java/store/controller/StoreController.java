@@ -30,7 +30,19 @@ public class StoreController {
         for (Product product : purchaseProducts.getPurchaseProducts()) {
             amountInfo.increaseTotal(product.getQuantity(), product.getPrice());
 
+            int giftCount = product.getGiftCount();
+            giftProducts.storeGiftProduct(product, giftCount);
+            amountInfo.increasePromotionDiscount(product, giftCount);
 
+            if (!product.isAvailableOnlyPromotion()) {
+                // 재고 감소 시킨다
+            }
+            if (product.isAvailableOnlyPromotion()) {
+               if(product.canReceiveMoreFreeGift()){
+
+
+                // 재고 감소 시킨다
+            }
         }
     }
 }
