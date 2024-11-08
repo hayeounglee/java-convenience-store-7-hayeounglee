@@ -28,38 +28,45 @@ public class StoreController {
 
         for (Product product : purchaseProducts.getPurchaseProducts()) {
 
-            int decreasePromotionStock = 0;
-            int decreaseNormalStock = 0;
+            int countPurchasePromotion = 0;
+            int countPurchaseNormal = 0;
             int giftCount = product.getGiftCount();
 
-            if (!product.isAvailableOnlyPromotion()) {
-                if (product.countPromotionDisable() > 0) {
+
+            if (!product.isAvailableOnlyPromotion()) { // 프로모션 제품만으로 안되는 경우
+                countPurchasePromotion = product.getPromotionStockCount();
+                countPurchaseNormal = product.getQuantity() - countPurchasePromotion;
+
+                if (product.countPromotionDisable() > 0) { // 프로모션 혜택을 받지 못하는 수량이 있는 경우
                     if (!inputView.getPurchaseOrNot(product.getName(), product.countPromotionDisable())) {
-                        decreasePromotionStock += product.decreasePromotionStock();
-                        decreaseNormalStock += product.decreaseNormalStock();
+                        countPurchasePromotion = product.buyOnlyPromotion();
+                        countPurchaseNormal = 0;
+
                     }
                 }
                 // 재고 감소 시킨다
-                decreasePromotionStock = product.getPromotionStockCount();
-                decreaseNormalStock = product.getQuantity() - decreasePromotionStock;
+
             }
 
             if (product.isAvailableOnlyPromotion()) {
+                countPurchasePromotion = product.getQuantity();
+
                 if (product.canReceiveMoreFreeGift()) {
                     if (inputView.getOneMoreFree(product)) {
-                        decreasePromotionStock += 1;
+                        countPurchasePromotion += 1;
                         giftCount += 1;
                     }
                 }
                 // 재고 감소 시킨다
-                decreasePromotionStock = product.getPromotionStockCount();
-                decreaseNormalStock = product.getQuantity() - decreasePromotionStock;
-            }
-            int stockCount = decreasePromotionStock + decreaseNormalStock;
-            amountInfo.increaseTotal(stockCount, product.getPrice());
 
-            giftProducts.storeGiftProduct(product, giftCount);
+
+            }
+
+            int stockCount = countPurchasePromotion + countPurchaseNormal;
+            amountInfo.increaseTotal(stockCount, product.getPrice());
             amountInfo.increasePromotionDiscount(product, giftCount);
+            giftProducts.storeGiftProduct(product, giftCount);
+
         }
 
         // amountInfo.calculateMembershipDiscount(inputView.getMembershipDiscountOrNot());
