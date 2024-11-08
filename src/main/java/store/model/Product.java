@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 public class Product {
     private final String name;
-    private final int quantity;
+    private int quantity;
     private int price;
     private int promotionStockCount = 0;
     private int normalStockCount = 0;
@@ -113,6 +113,12 @@ public class Product {
         return decreasePromotionStock() + decreaseNormalStock();
     }
 
+    public int buyOnlyPromotion() {
+        quantity = promotionStockCount - decreasePromotionStock();
+        return quantity;
+
+    }
+
     public int decreasePromotionStock() {
         return promotionStockCount % promotionCount;
     }
@@ -128,7 +134,7 @@ public class Product {
     public boolean canReceiveMoreFreeGift() throws IOException {
         int remainProduct = quantity % promotionCount;
         if (remainProduct == (promotionCount - 1)) {
-            return (promotionCount - quantity) >= 1;
+            return (promotionStockCount - quantity) >= 1;
         }
         return false;
     }
@@ -145,7 +151,7 @@ public class Product {
             String[] promotionInfo = readPromotion.split(",");
             if (promotionInfo[0].equals(promotion) & isValidateDate(promotionInfo[3], promotionInfo[4])) {
                 reader.close();
-                return Integer.parseInt(promotionInfo[1] + promotionInfo[2]); //각각 parse해야 하나?
+                return Integer.parseInt(promotionInfo[1]) + Integer.parseInt(promotionInfo[2]); //각각 parse해야 하나?
             }
         }
         reader.close();
