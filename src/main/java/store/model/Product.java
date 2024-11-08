@@ -21,7 +21,6 @@ public class Product {
         String[] productInfo = validate(product);
         name = productInfo[0];
         quantity = Integer.parseInt(productInfo[1]);
-        promotionCount = getPromotionCount();
     }
 
     private String[] validate(String product) throws IOException {
@@ -87,12 +86,12 @@ public class Product {
             String foodPromotion = food.split(",")[3];
 
             if (foodName.equals(productInfo[0]) & !foodPromotion.equals("null")) {
-                promotionStockCount += Integer.parseInt(foodQuantity);
                 promotion = foodPromotion;
+                promotionCount = getPromotionCount();
+                promotionStockCount += Integer.parseInt(foodQuantity);
             }
             if (foodName.equals(productInfo[0]) & foodPromotion.equals("null")) {
                 normalStockCount += Integer.parseInt(foodQuantity);
-                promotion = foodPromotion;
             }
         }
         if (promotionStockCount + normalStockCount < Integer.parseInt(productInfo[1])) {
@@ -110,20 +109,53 @@ public class Product {
         return false;
     }
 
+    public int countPromotionDisable() {
+        return decreasePromotionStock() + decreaseNormalStock();
+    }
+
+    public int decreasePromotionStock() {
+        return promotionStockCount % promotionCount;
+    }
+
+    public int decreaseNormalStock() {
+        return quantity - promotionStockCount;
+    }
+
     public int getGiftCount() {
         return (promotionStockCount / promotionCount);
     }
 
-
     public boolean canReceiveMoreFreeGift() throws IOException {
         int remainProduct = quantity % promotionCount;
-        return remainProduct == (promotionCount - 1);
+        if (remainProduct == (promotionCount - 1)) {
+            return (promotionCount - quantity) >= 1;
+        }
+        return false;
+    }
+
+
+    public int getPromotionCount() throws IOException {
+        // if (promotion.equals("null")) return 0;
+        BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/promotions.md")); //java 파일 경로 입력방법
+        String readPromotion;
+
+        reader.readLine();
+
+        while ((readPromotion = reader.readLine()) != null) {
+            String[] promotionInfo = readPromotion.split(",");
+            if (promotionInfo[0].equals(promotion) & isValidateDate(promotionInfo[3], promotionInfo[4])) {
+                reader.close();
+                return Integer.parseInt(promotionInfo[1] + promotionInfo[2]); //각각 parse해야 하나?
+            }
+        }
+        reader.close();
+        return 0;
     }
 
     private boolean isValidateDate(String start, String end) {
         LocalDateTime targetTime = DateTimes.now();
         String[] startInfo = start.split("-");
-        String[] endInfo = start.split("-");
+        String[] endInfo = end.split("-");
 
         LocalDate targetDate = LocalDate.of(targetTime.getYear(), targetTime.getMonth(), targetTime.getDayOfMonth());
         LocalDate startDate = LocalDate.of(Integer.parseInt(startInfo[0]), Integer.parseInt(startInfo[1]), Integer.parseInt(startInfo[2]));
@@ -132,24 +164,6 @@ public class Product {
             return true;
         }
         return false;
-    }
-
-    public int getPromotionCount() throws IOException {
-        if (promotion.equals("null")) return 0;
-        BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/promotions.md")); //java 파일 경로 입력방법
-        String promotion;
-
-        reader.readLine();
-
-        while ((promotion = reader.readLine()) != null) {
-            String[] promotionInfo = promotion.split(",");
-            if (promotionInfo[0].equals(promotion) & isValidateDate(promotionInfo[3], promotionInfo[4])) {
-                reader.close();
-                return Integer.parseInt(promotionInfo[1] + promotionInfo[2]); //각각 parse해야 하나?
-            }
-        }
-        reader.close();
-        return 0;
     }
 
     public String getName() {
@@ -164,9 +178,8 @@ public class Product {
         return price;
     }
 
-    public String getPromotion() {
-        return promotion;
+    public int getPromotionStockCount() {
+        return promotionStockCount;
     }
-
 }
 
