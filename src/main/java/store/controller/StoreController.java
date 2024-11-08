@@ -65,11 +65,14 @@ public class StoreController {
             int stockCount = countPurchasePromotion + countPurchaseNormal;
             amountInfo.increaseTotal(stockCount, product.getPrice());
             amountInfo.increasePromotionDiscount(product, giftCount);
+            amountInfo.increaseMembershipDiscount(product, giftCount);//타이밍이 멤버십 할인 할 거냐 하기 전에 이미 계산되는게 아쉬움..
+
             giftProducts.storeGiftProduct(product, giftCount);
 
         }
-
-        // amountInfo.calculateMembershipDiscount(inputView.getMembershipDiscountOrNot());
+        if (inputView.getMembershipDiscountOrNot()) {
+            amountInfo.calculateMembershipDiscount(giftProducts);
+        }
 //
 //        if (inputView.getAdditionalPurchase()) {
 //            //게임 다시 시작
