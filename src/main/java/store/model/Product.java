@@ -120,6 +120,7 @@ public class Product {
     }
 
     public int decreasePromotionStock() {
+        if (promotionCount == 0) return 0;
         return promotionStockCount % promotionCount;
     }
 
@@ -128,10 +129,12 @@ public class Product {
     }
 
     public int getGiftCount() {
+        if (promotionCount == 0) return 0;
         return (promotionStockCount / promotionCount);
     }
 
     public boolean canReceiveMoreFreeGift() throws IOException {
+        if (promotionCount == 0) return false;
         int remainProduct = quantity % promotionCount;
         if (remainProduct == (promotionCount - 1)) {
             return (promotionStockCount - quantity) >= 1;
