@@ -134,6 +134,9 @@ public class Product {
 
     public int getGiftCount() {
         if (promotionCount == 0) return 0;
+        if (isAvailableOnlyPromotion()) {
+            return (quantity / promotionCount);
+        }
         return (promotionStockCount / promotionCount);
     }
 
