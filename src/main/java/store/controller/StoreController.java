@@ -1,9 +1,8 @@
 package store.controller;
 
 import store.model.Product;
-import store.model.receipt.AmountInfo;
-import store.model.receipt.GiftProducts;
 import store.model.receipt.PurchaseProducts;
+import store.service.ReceiptService;
 import store.view.InputView;
 import store.view.OutputView;
 
@@ -13,18 +12,26 @@ public class StoreController {
     private final InputView inputView;
     private final OutputView outputView;
 
+    private boolean nextPlay = true;
+    private PurchaseProducts purchaseProducts;
+    private ReceiptService receiptService;
+
     public StoreController(InputView inputView, OutputView outputView) {
         this.inputView = inputView;
         this.outputView = outputView;
     }
 
     public void run() throws IOException {
-        AmountInfo amountInfo = new AmountInfo();
-        GiftProducts giftProducts = new GiftProducts();
+        while (nextPlay) {
+            play();
+        }
+    }
+
+    private void play() throws IOException {
+        receiptService = new ReceiptService();
 
         outputView.printStoreMenu();
-        PurchaseProducts purchaseProducts = new PurchaseProducts(inputView.getProductAndPrice());
-
+        repeatUntilProductAndPriceValid();
 
         for (Product product : purchaseProducts.getPurchaseProducts()) {
             int countPurchasePromotion = 0;
@@ -61,23 +68,36 @@ public class StoreController {
             }
 
             int stockCount = countPurchasePromotion + countPurchaseNormal;
-            amountInfo.increaseTotal(stockCount, product.getPrice());
-            amountInfo.increasePromotionDiscount(product, giftCount);
-            amountInfo.increaseMembershipDiscount(product, giftCount);//타이밍이 멤버십 할인 할 거냐 하기 전에 이미 계산되는게 아쉬움..
-
-            giftProducts.storeGiftProduct(product, giftCount);
-
+            receiptService.make(stockCount, giftCount, product);
         }
         if (inputView.getMembershipDiscountOrNot()) {
-            amountInfo.calculateMembershipDiscount(giftProducts);
+            receiptService.calculateDiscount();
         }
-//
-//        if (inputView.getAdditionalPurchase()) {
-//            //게임 다시 시작
-//        }
+        printReceipt();
+
+
+        if (!inputView.getAdditionalPurchase()) {
+            nextPlay = false;
+        }
     }
 
-    private void generateReceipt(int stockCount, Product product, int giftCount){
+    private void repeatUntilProductAndPriceValid() {
+        while (true) {
+            try {
+                purchaseProducts = new PurchaseProducts(inputView.getProductAndPrice());
+            } catch (IllegalArgumentException | IOException e) {
+                System.out.println(e.getMessage()); //왜 이렇게 가져와야 하지?
+            }
+        }
+    }
 
+    private void repeatUntilYesNoValid(){
+        
+    }
+
+    private void printReceipt() {
+        outputView.printPurchaseProduct(purchaseProducts);
+        outputView.printGiftProducts(receiptService.getGiftProducts());
+        outputView.printAmountInfo(receiptService.getAmountInfo());
     }
 }

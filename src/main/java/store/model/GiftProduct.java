@@ -8,4 +8,12 @@ public class GiftProduct {
         name = productName;
         this.quantity = quantity;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
 }
