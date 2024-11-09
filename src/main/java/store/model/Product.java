@@ -120,7 +120,6 @@ public class Product {
     public int buyOnlyPromotion() {
         quantity = promotionStockCount - decreasePromotionStock();
         return quantity;
-
     }
 
     public int decreasePromotionStock() {
@@ -184,6 +183,10 @@ public class Product {
 
     public boolean isPromotionProduct() {
         return !promotion.equals("null");
+    }
+
+    public void increaseQuantity(){
+        quantity += 1;
     }
 
     public String getName() {
