@@ -1,40 +1,46 @@
 package store.model.receipt;
 
+import store.Constant.MembershipDiscount;
 import store.model.Product;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AmountInfo {
-    private final static int MEMBERSHIP_DISCOUNT_MAX = 8000;
+    private int totalPurchaseAmount;
+    private int totalPurchaseCount;
+    private int promotionDiscount;
+    private int membershipDiscount;
 
-    private int totalPurchaseAmount = 0;
-    private int totalPurchaseCount = 0;
-    private int promotionDiscount = 0;
-    private int membershipDiscount = 0;
+    public AmountInfo() {
+        init();
+    }
 
-    public void increaseTotal(int quantity, int price) {
+    private void init() {
+        totalPurchaseAmount = 0;
+        totalPurchaseCount = 0;
+        promotionDiscount = 0;
+        membershipDiscount = 0;
+    }
+
+    public void calculateTotal(int quantity, int price) {
         totalPurchaseCount += quantity;
         totalPurchaseAmount += quantity * price;
     }
 
-    public void increasePromotionDiscount(Product product, int giftCount) {
+    public void calculatePromotionDiscount(Product product, int giftCount) {
         promotionDiscount += product.getPrice() * giftCount;
     }
 
     public void calculateMembershipDiscount(boolean isMembershipDiscount) {
-        if(!isMembershipDiscount){
+        if (!isMembershipDiscount) {
             membershipDiscount = 0;
             return;
         }
 
         DecimalFormat df = new DecimalFormat("#");
-        membershipDiscount = Integer.parseInt(df.format(membershipDiscount * 0.3));
+        membershipDiscount = Integer.parseInt(df.format(membershipDiscount * MembershipDiscount.DISCOUNT_RATE.getValue()));
 
-        if (membershipDiscount > MEMBERSHIP_DISCOUNT_MAX) {
-            membershipDiscount = MEMBERSHIP_DISCOUNT_MAX;
-        }
+        membershipDiscount = Math.min(membershipDiscount, (int)MembershipDiscount.MAX_DISCOUNT.getValue());
     }
 
     public void increaseMembershipDiscount(Product product, int giftCount) {
