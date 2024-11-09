@@ -92,7 +92,9 @@ public class Product {
             if (foodName.equals(productInfo[0]) & !foodPromotion.equals("null")) {
                 promotion = foodPromotion;
                 promotionCount = getPromotionCount();
-                promotionStockCount += Integer.parseInt(foodQuantity);
+                if (promotionCount != 0) {
+                    promotionStockCount += Integer.parseInt(foodQuantity);
+                }
             }
             if (foodName.equals(productInfo[0]) & foodPromotion.equals("null")) {
                 normalStockCount += Integer.parseInt(foodQuantity);
@@ -148,7 +150,6 @@ public class Product {
         return false;
     }
 
-
     public int getPromotionCount() throws IOException {
         // if (promotion.equals("null")) return 0;
         BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/promotions.md")); //java 파일 경로 입력방법
@@ -185,7 +186,7 @@ public class Product {
         return !promotion.equals("null");
     }
 
-    public void increaseQuantity(){
+    public void increaseQuantity() {
         quantity += 1;
     }
 
