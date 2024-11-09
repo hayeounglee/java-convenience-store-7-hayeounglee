@@ -21,4 +21,7 @@ public class GiftProducts {
         giftProducts = new ArrayList<>();
     }
 
+    public List<GiftProduct> getGiftProducts() {
+        return giftProducts;
+    }
 }

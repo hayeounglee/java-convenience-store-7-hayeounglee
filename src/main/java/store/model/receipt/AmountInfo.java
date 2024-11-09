@@ -13,12 +13,6 @@ public class AmountInfo {
     private int totalPurchaseCount = 0;
     private int promotionDiscount = 0;
     private int membershipDiscount = 0;
-    private int payment = 0;
-
-
-    public AmountInfo() {
-
-    }
 
     public void increaseTotal(int quantity, int price) {
         totalPurchaseCount += quantity;
@@ -29,24 +23,38 @@ public class AmountInfo {
         promotionDiscount += product.getPrice() * giftCount;
     }
 
-    public void calculateMembershipDiscount(GiftProducts giftProducts) {
+    public void calculateMembershipDiscount() {
         DecimalFormat df = new DecimalFormat("#");
         membershipDiscount = Integer.parseInt(df.format(membershipDiscount * 0.3));
 
         if (membershipDiscount > MEMBERSHIP_DISCOUNT_MAX) {
             membershipDiscount = MEMBERSHIP_DISCOUNT_MAX;
         }
-        System.out.println(membershipDiscount);
     }
 
     public void increaseMembershipDiscount(Product product, int giftCount) {
         if (giftCount == 0) {
             membershipDiscount += product.getPrice() * product.getQuantity();
         }
-
     }
 
-    private void calculatePayment() {
-        payment = totalPurchaseAmount - (promotionDiscount + membershipDiscount);
+    public int getPayment() {
+        return totalPurchaseAmount - (promotionDiscount + membershipDiscount);
+    }
+
+    public int getTotalPurchaseAmount() {
+        return totalPurchaseAmount;
+    }
+
+    public int getTotalPurchaseCount() {
+        return totalPurchaseCount;
+    }
+
+    public int getPromotionDiscount() {
+        return promotionDiscount;
+    }
+
+    public int getMembershipDiscount() {
+        return membershipDiscount;
     }
 }
