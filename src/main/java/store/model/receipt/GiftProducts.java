@@ -9,7 +9,7 @@ import java.util.List;
 public class GiftProducts {
     private List<GiftProduct> giftProducts;
 
-    public void GiftProduct() {
+    public GiftProducts() {
         giftProducts = new ArrayList<>();
     }
 
@@ -17,10 +17,6 @@ public class GiftProducts {
         if (num > 0) {
             giftProducts.add(new GiftProduct(product.getName(), num));
         }
-    }
-
-    public GiftProducts() {
-        giftProducts = new ArrayList<>();
     }
 
     public List<GiftProduct> getGiftProducts() {

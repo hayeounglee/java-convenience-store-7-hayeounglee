@@ -22,7 +22,7 @@ public class AmountInfo {
         membershipDiscount = 0;
     }
 
-    public void calculateTotal(int quantity, int price) {
+    public void increaseTotal(int quantity, int price) {
         totalPurchaseCount += quantity;
         totalPurchaseAmount += quantity * price;
     }

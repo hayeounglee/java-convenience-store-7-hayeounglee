@@ -18,6 +18,10 @@ public class StoreController {
     private ReceiptService receiptService;
     private StockManageService stockManageService;
 
+    private int countPurchasePromotion;
+    private int countPurchaseNormal;
+    private int giftCount;
+
     public StoreController(InputView inputView, OutputView outputView) {
         this.inputView = inputView;
         this.outputView = outputView;
@@ -30,56 +34,66 @@ public class StoreController {
     }
 
     private void play() throws IOException {
-        receiptService = new ReceiptService();
-        stockManageService = new StockManageService();
+        generateService();
         stockManageService.bringStock();
 
         outputView.printStoreMenu();
         repeatUntilProductAndPriceValid();
 
         for (Product product : purchaseProducts.getPurchaseProducts()) {
-            int countPurchasePromotion = 0;
-            int countPurchaseNormal = 0;
-            int giftCount = product.getGiftCount();
+            initCount(product);
+            calculateCount(product);
 
-            if (!product.isAvailableOnlyPromotion()) { // 프로모션 제품만으로 안되는 경우 + 같은 경우!!!
-                countPurchasePromotion = product.getPromotionStockCount();
-                countPurchaseNormal = product.getQuantity() - countPurchasePromotion;
-
-                if (product.countPromotionDisable() > 0 & product.isPromotionProduct()) { // 프로모션 혜택을 받지 못하는 수량이 있는 경우
-                    if (!repeatUntilPurchaseValid(product)) {
-                        countPurchasePromotion = product.buyOnlyPromotion();
-                        countPurchaseNormal = 0;
-                    }
-                }
-            }
-
-            if (product.isAvailableOnlyPromotion()) {
-                countPurchasePromotion = product.getQuantity();
-
-                if (product.canReceiveMoreFreeGift()) {
-                    if (repeatUntilOneMoreFreeValid(product)) {
-                        countPurchasePromotion += 1;
-                        giftCount += 1;
-                        product.increaseQuantity();
-                    }
-                }
-            }
-
-            // 재고 감소 시킨다
             stockManageService.manageStock(countPurchaseNormal, countPurchasePromotion, product);
 
             int stockCount = countPurchasePromotion + countPurchaseNormal;
             receiptService.make(stockCount, giftCount, product);
         }
-
-        receiptService.calculateDiscount(repeatUntilMembershipDiscountValid());
         printReceipt();
-        stockManageService.reflectStock();
 
         if (!repeatUntilAdditionalPlayValid()) {
             nextPlay = false;
         }
+    }
+
+    private void calculateCount(Product product) {
+        if (product.isAvailableOnlyPromotion()) {
+            countPurchasePromotion = product.getQuantity();
+
+            if (product.canReceiveMoreFreeGift()) {
+                if (repeatUntilOneMoreFreeValid(product)) {
+                    countPurchasePromotion += 1;
+                    giftCount += 1;
+                    product.increaseQuantity();
+                }
+            }
+            return;
+        }
+
+
+        // 프로모션 제품만으로 안되는 경우 + 같은 경우!!!
+        countPurchasePromotion = product.getPromotionStockCount();
+        countPurchaseNormal = product.getQuantity() - countPurchasePromotion;
+
+        if (product.countPromotionDisable() > 0 & product.isPromotionProduct()) { // 프로모션 혜택을 받지 못하는 수량이 있는 경우
+            if (!repeatUntilPurchaseValid(product)) {
+                countPurchasePromotion = product.buyOnlyPromotion();
+                countPurchaseNormal = 0;
+            }
+        }
+
+
+    }
+
+    private void generateService() {
+        receiptService = new ReceiptService();
+        stockManageService = new StockManageService(); //여기다가 선언해야 하나?
+    }
+
+    private void initCount(Product product) {
+        countPurchasePromotion = 0;
+        countPurchaseNormal = 0;
+        giftCount = product.getGiftCount();
     }
 
     private void repeatUntilProductAndPriceValid() {
@@ -133,9 +147,11 @@ public class StoreController {
         }
     }
 
-    private void printReceipt() {
+    private void printReceipt() throws IOException {
+        receiptService.calculateDiscount(repeatUntilMembershipDiscountValid());
         outputView.printPurchaseProduct(purchaseProducts);
         outputView.printGiftProducts(receiptService.getGiftProducts());
         outputView.printAmountInfo(receiptService.getAmountInfo());
+        stockManageService.reflectStock();
     }
 }

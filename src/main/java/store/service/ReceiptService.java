@@ -15,7 +15,7 @@ public class ReceiptService {
 
     public void make(int stockCount, int giftCount, Product product) {
         amountInfo.increaseTotal(stockCount, product.getPrice());
-        amountInfo.increasePromotionDiscount(product, giftCount);
+        amountInfo.calculatePromotionDiscount(product, giftCount);
         amountInfo.increaseMembershipDiscount(product, giftCount);//타이밍이 멤버십 할인 할 거냐 하기 전에 이미 계산되는게 아쉬움..
 
         giftProducts.storeGiftProduct(product, giftCount);

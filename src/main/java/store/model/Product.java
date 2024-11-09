@@ -24,22 +24,36 @@ public class Product {
     }
 
     private String[] validate(String product) throws IOException {
+        validateForm(product);
+
+        product = product.substring(1, product.length() - 1); // 깔끔하게 파악할 수 있게
+        String[] oneProduct = product.split("-", -1);
+
+        validateOneProductForm(oneProduct);
+        validateNumber(oneProduct);
+        validateProduct(oneProduct);
+
+        return oneProduct;
+    }
+
+    void validateForm(String product) {
         if (product.isBlank() | product.isEmpty()) {
             throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
         }
         if (!(product.charAt(0) == '[' && product.charAt(product.length() - 1) == ']' && product.contains("-"))) { //"" vs ''의 차이????? String vs char
             throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
         }
+    }
 
-        product = product.substring(1, product.length() - 1); // 깔끔하게 파악할 수 있게
-        String[] oneProduct = product.split("-", -1);
-
+    void validateOneProductForm(String[] oneProduct) {
         for (String one : oneProduct) {
             if (one.isBlank() | one.isEmpty()) {
                 throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
             }
         }
+    }
 
+    void validateNumber(String[] oneProduct) {
         try {
             Integer.parseInt(oneProduct[1]);
         } catch (IllegalArgumentException e) {
@@ -49,7 +63,9 @@ public class Product {
         if (Integer.parseInt(oneProduct[1]) <= 0) {
             throw new IllegalArgumentException("[ERROR] 수량은 1이상의 숫자를 입력해야 합니다. 다시 입력해 주세요.");
         }
+    }
 
+    void validateProduct(String[] oneProduct) throws IOException {
         if (!isExistProduct(oneProduct[0])) {
             throw new IllegalArgumentException("[ERROR] 존재하지 않는 상품입니다. 다시 입력해 주세요.");
         }
@@ -57,7 +73,6 @@ public class Product {
         if (isStockLack(oneProduct)) {
             throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
         }
-        return oneProduct;
     }
 
     private boolean isExistProduct(String productName) throws IOException {
@@ -107,6 +122,7 @@ public class Product {
         reader.close();
         return false;
     }
+
 
     public boolean isAvailableOnlyPromotion() {
         return promotionStockCount > quantity;
