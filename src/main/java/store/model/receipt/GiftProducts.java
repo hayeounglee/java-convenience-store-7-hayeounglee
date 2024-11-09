@@ -14,7 +14,9 @@ public class GiftProducts {
     }
 
     public void storeGiftProduct(Product product, int num) {
-        giftProducts.add(new GiftProduct(product.getName(), num));
+        if (num > 0) {
+            giftProducts.add(new GiftProduct(product.getName(), num));
+        }
     }
 
     public GiftProducts() {
