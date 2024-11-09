@@ -27,17 +27,21 @@ public class StockManageService {
         String targetName = product.getName();
 
         for (int i = 0; i < foods.size(); i++) {
-            String[] str = foods.get(i).split(",");
-            if (str[0].equals(targetName) & !str[3].equals("null")) {
-                String updateStock = str[0] + "," + str[1] + "," + Integer.toString(Integer.parseInt(str[2]) - countPurchasePromotion) + "," + str[3];
+            String[] food = foods.get(i).split(",");
+            if (food[0].equals(targetName)) {
+                int newStock = updateStock(food, countPurchaseNormal, countPurchasePromotion);
+                String updateStock = food[0] + "," + food[1] + "," + newStock + "," + food[3];
                 foods.set(i, updateStock);
-            }
-            if (str[0].equals(targetName) & str[3].equals("null")) {
-                String updateStock = str[0] + "," + str[1] + "," + Integer.toString(Integer.parseInt(str[2]) - countPurchaseNormal) + "," + str[3];
-                foods.set(i, updateStock);
-                break;
             }
         }
+    }
+
+    private int updateStock(String[] food, int countPurchaseNormal, int countPurchasePromotion) {
+        int currentSock = Integer.parseInt(food[2]);
+        if (food[3].equals("null")) {
+            return currentSock - countPurchaseNormal;
+        }
+        return currentSock - countPurchasePromotion;
     }
 
     public void reflectStock() throws IOException {
