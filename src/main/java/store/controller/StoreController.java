@@ -43,7 +43,7 @@ public class StoreController {
                 countPurchaseNormal = product.getQuantity() - countPurchasePromotion;
 
                 if (product.countPromotionDisable() > 0 & product.isPromotionProduct()) { // 프로모션 혜택을 받지 못하는 수량이 있는 경우
-                    if (!inputView.getPurchaseOrNot(product.getName(), product.countPromotionDisable())) {
+                    if (!repeatUntilPurchaseValid(product)) {
                         countPurchasePromotion = product.buyOnlyPromotion();
                         countPurchaseNormal = 0;
 
@@ -57,7 +57,7 @@ public class StoreController {
                 countPurchasePromotion = product.getQuantity();
 
                 if (product.canReceiveMoreFreeGift()) {
-                    if (inputView.getOneMoreFree(product)) {
+                    if (repeatUntilOneMoreFreeValid(product)) {
                         countPurchasePromotion += 1;
                         giftCount += 1;
                     }
@@ -70,13 +70,14 @@ public class StoreController {
             int stockCount = countPurchasePromotion + countPurchaseNormal;
             receiptService.make(stockCount, giftCount, product);
         }
-        if (inputView.getMembershipDiscountOrNot()) {
+
+        if (repeatUntilMembershipDiscountValid()) {
             receiptService.calculateDiscount();
         }
+        
         printReceipt();
 
-
-        if (!inputView.getAdditionalPurchase()) {
+        if (!repeatUntilAdditionalPlayValid()) {
             nextPlay = false;
         }
     }
@@ -85,14 +86,51 @@ public class StoreController {
         while (true) {
             try {
                 purchaseProducts = new PurchaseProducts(inputView.getProductAndPrice());
+                return;
             } catch (IllegalArgumentException | IOException e) {
                 System.out.println(e.getMessage()); //왜 이렇게 가져와야 하지?
             }
         }
     }
 
-    private void repeatUntilYesNoValid(){
-        
+    private boolean repeatUntilPurchaseValid(Product product) {
+        while (true) {
+            try {
+                return inputView.getPurchaseOrNot(product.getName(), product.countPromotionDisable());
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private boolean repeatUntilOneMoreFreeValid(Product product) {
+        while (true) {
+            try {
+                return inputView.getOneMoreFree(product);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private boolean repeatUntilMembershipDiscountValid() {
+        while (true) {
+            try {
+                return inputView.getMembershipDiscountOrNot();
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private boolean repeatUntilAdditionalPlayValid() {
+        while (true) {
+            try {
+                return inputView.getAdditionalPurchase();
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     private void printReceipt() {
