@@ -1,9 +1,14 @@
 package store.view;
 
+import store.model.GiftProduct;
+import store.model.Product;
+import store.model.receipt.AmountInfo;
+import store.model.receipt.GiftProducts;
+import store.model.receipt.PurchaseProducts;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
 
 public class OutputView {
     public void printStoreMenu() throws IOException {
@@ -23,39 +28,30 @@ public class OutputView {
         reader.close();
     }
 
-
-    public void printReceipt(List<String> result) throws IOException {
-        printPurchaseProduct();
-        printAmountInfo(result);
-    }
-
-    private void printPurchaseProduct() throws IOException {
-        System.out.println("==============W 편의점================\n" + "상품명\t\t수량\t금액");
-
-        BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/receipt.md")); //java 파일 경로 입력방법
-        String product;
-        reader.readLine();
-
-        while ((product = reader.readLine()) != null) {
-            String[] str = product.split(",");
-            System.out.printf("%s\t\t%s\t%s", str[0], str[1], String.format("%,d", Integer.parseInt(str[2]))); //null은 재고 없음으로 하기
-            System.out.println();
+    public void printPurchaseProduct(PurchaseProducts purchaseProducts) {
+        System.out.println("==============W 편의점================");
+        System.out.println("상품명\t\t\t\t수량\t\t금액");
+        for (Product product : purchaseProducts.getPurchaseProducts()) {
+            System.out.printf("%-4s\t\t\t\t%s\t\t%s\n", product.getName(), product.getQuantity(), product.getQuantity() * product.getPrice());
         }
-        reader.close();
-
-        System.out.println("=============증\t정===============");
-
     }
 
-    private void printAmountInfo(List<String> result) {
-        System.out.println("====================================");
-        System.out.printf("총구매액\t\t%s\t%s", result.get(0), String.format("%,d", Integer.parseInt(result.get(1))));
-        System.out.println();
-        System.out.printf("행사할인\t\t%s", String.format("%,d", Integer.parseInt(result.get(2))));
-        System.out.println();
-        System.out.printf("멤버십할인\t\t%s", String.format("%,d", Integer.parseInt(result.get(3))));
-        System.out.println();
-        System.out.printf("내실돈\t\t%s", String.format("%,d", Integer.parseInt(result.get(4))));
+    public void printGiftProducts(GiftProducts giftProducts) {
+        System.out.println("=============증\t\t정===============");
+        for (GiftProduct giftProduct : giftProducts.getGiftProducts()) {
+            System.out.printf("%-4s\t\t\t\t%d\n", giftProduct.getName(), giftProduct.getQuantity());
+        }
+    }
 
+    public void printAmountInfo(AmountInfo amountInfo) {
+        System.out.println("====================================");
+        System.out.printf("총구매액\t\t\t\t%s\t\t%s", amountInfo.getTotalPurchaseCount(), String.format("%,d", amountInfo.getTotalPurchaseAmount()));
+        System.out.println();
+        System.out.printf("행사할인\t\t\t\t\t\t%s", String.format("%,d", amountInfo.getPromotionDiscount() * -1));
+        System.out.println();
+        System.out.printf("멤버십할인\t\t\t\t\t\t%s", String.format("%,d", amountInfo.getMembershipDiscount() * -1));
+        System.out.println();
+        System.out.printf("내실돈\t\t\t\t\t\t%s", String.format("%,d", amountInfo.getPayment()));
+        System.out.println();
     }
 }
