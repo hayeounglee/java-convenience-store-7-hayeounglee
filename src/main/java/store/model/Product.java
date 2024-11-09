@@ -46,6 +46,10 @@ public class Product {
             throw new IllegalArgumentException("[ERROR] 수량은 숫자를 입력해야합니다. 다시 입력해 주세요.");
         }
 
+        if (Integer.parseInt(oneProduct[1]) <= 0) {
+            throw new IllegalArgumentException("[ERROR] 수량은 1이상의 숫자를 입력해야 합니다. 다시 입력해 주세요.");
+        }
+
         if (!isExistProduct(oneProduct[0])) {
             throw new IllegalArgumentException("[ERROR] 존재하지 않는 상품입니다. 다시 입력해 주세요.");
         }
@@ -175,7 +179,7 @@ public class Product {
         return false;
     }
 
-    public boolean isPromotionProduct(){
+    public boolean isPromotionProduct() {
         return !promotion.equals("null");
     }
 
