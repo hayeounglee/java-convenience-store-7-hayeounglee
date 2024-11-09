@@ -21,8 +21,8 @@ public class ReceiptService {
         giftProducts.storeGiftProduct(product, giftCount);
     }
 
-    public void calculateDiscount() {
-        amountInfo.calculateMembershipDiscount();
+    public void calculateDiscount(boolean isMembershipDiscount) {
+        amountInfo.calculateMembershipDiscount(isMembershipDiscount);
     }
 
     public AmountInfo getAmountInfo() {

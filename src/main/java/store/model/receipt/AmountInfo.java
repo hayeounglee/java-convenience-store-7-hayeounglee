@@ -23,7 +23,12 @@ public class AmountInfo {
         promotionDiscount += product.getPrice() * giftCount;
     }
 
-    public void calculateMembershipDiscount() {
+    public void calculateMembershipDiscount(boolean isMembershipDiscount) {
+        if(!isMembershipDiscount){
+            membershipDiscount = 0;
+            return;
+        }
+
         DecimalFormat df = new DecimalFormat("#");
         membershipDiscount = Integer.parseInt(df.format(membershipDiscount * 0.3));
 

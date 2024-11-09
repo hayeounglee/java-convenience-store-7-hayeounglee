@@ -3,6 +3,7 @@ package store.controller;
 import store.model.Product;
 import store.model.receipt.PurchaseProducts;
 import store.service.ReceiptService;
+import store.service.StockManageService;
 import store.view.InputView;
 import store.view.OutputView;
 
@@ -15,6 +16,7 @@ public class StoreController {
     private boolean nextPlay = true;
     private PurchaseProducts purchaseProducts;
     private ReceiptService receiptService;
+    private StockManageService stockManageService;
 
     public StoreController(InputView inputView, OutputView outputView) {
         this.inputView = inputView;
@@ -29,6 +31,8 @@ public class StoreController {
 
     private void play() throws IOException {
         receiptService = new ReceiptService();
+        stockManageService = new StockManageService();
+        stockManageService.bringStock();
 
         outputView.printStoreMenu();
         repeatUntilProductAndPriceValid();
@@ -38,7 +42,7 @@ public class StoreController {
             int countPurchaseNormal = 0;
             int giftCount = product.getGiftCount();
 
-            if (!product.isAvailableOnlyPromotion()) { // 프로모션 제품만으로 안되는 경우
+            if (!product.isAvailableOnlyPromotion()) { // 프로모션 제품만으로 안되는 경우 + 같은 경우!!!
                 countPurchasePromotion = product.getPromotionStockCount();
                 countPurchaseNormal = product.getQuantity() - countPurchasePromotion;
 
@@ -46,11 +50,8 @@ public class StoreController {
                     if (!repeatUntilPurchaseValid(product)) {
                         countPurchasePromotion = product.buyOnlyPromotion();
                         countPurchaseNormal = 0;
-
                     }
                 }
-                // 재고 감소 시킨다
-
             }
 
             if (product.isAvailableOnlyPromotion()) {
@@ -60,22 +61,21 @@ public class StoreController {
                     if (repeatUntilOneMoreFreeValid(product)) {
                         countPurchasePromotion += 1;
                         giftCount += 1;
+                        product.increaseQuantity();
                     }
                 }
-                // 재고 감소 시킨다
-
-
             }
+
+            // 재고 감소 시킨다
+            stockManageService.manageStock(countPurchaseNormal, countPurchasePromotion, product);
 
             int stockCount = countPurchasePromotion + countPurchaseNormal;
             receiptService.make(stockCount, giftCount, product);
         }
 
-        if (repeatUntilMembershipDiscountValid()) {
-            receiptService.calculateDiscount();
-        }
-        
+        receiptService.calculateDiscount(repeatUntilMembershipDiscountValid());
         printReceipt();
+        stockManageService.reflectStock();
 
         if (!repeatUntilAdditionalPlayValid()) {
             nextPlay = false;
