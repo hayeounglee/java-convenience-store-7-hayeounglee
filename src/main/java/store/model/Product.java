@@ -90,9 +90,9 @@ public class Product {
             String foodPromotion = food.split(",")[3];
 
             if (foodName.equals(productInfo[0]) & !foodPromotion.equals("null")) {
-                promotion = foodPromotion;
-                promotionCount = getPromotionCount();
+                promotionCount = getPromotionCount(foodPromotion);
                 if (promotionCount != 0) {
+                    promotion = foodPromotion;
                     promotionStockCount += Integer.parseInt(foodQuantity);
                 }
             }
@@ -109,10 +109,7 @@ public class Product {
     }
 
     public boolean isAvailableOnlyPromotion() {
-        if (promotionStockCount > quantity) {
-            return true;
-        }
-        return false;
+        return promotionStockCount > quantity;
     }
 
     public int countPromotionDisable() {
@@ -141,7 +138,7 @@ public class Product {
         return (promotionStockCount / promotionCount);
     }
 
-    public boolean canReceiveMoreFreeGift() throws IOException {
+    public boolean canReceiveMoreFreeGift() {
         if (promotionCount == 0) return false;
         int remainProduct = quantity % promotionCount;
         if (remainProduct == (promotionCount - 1)) {
@@ -150,7 +147,7 @@ public class Product {
         return false;
     }
 
-    public int getPromotionCount() throws IOException {
+    public int getPromotionCount(String promotionName) throws IOException {
         // if (promotion.equals("null")) return 0;
         BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/promotions.md")); //java 파일 경로 입력방법
         String readPromotion;
@@ -159,7 +156,7 @@ public class Product {
 
         while ((readPromotion = reader.readLine()) != null) {
             String[] promotionInfo = readPromotion.split(",");
-            if (promotionInfo[0].equals(promotion) & isValidateDate(promotionInfo[3], promotionInfo[4])) {
+            if (promotionInfo[0].equals(promotionName) & isValidateDate(promotionInfo[3], promotionInfo[4])) {
                 reader.close();
                 return Integer.parseInt(promotionInfo[1]) + Integer.parseInt(promotionInfo[2]); //각각 parse해야 하나?
             }
@@ -170,16 +167,14 @@ public class Product {
 
     private boolean isValidateDate(String start, String end) {
         LocalDateTime targetTime = DateTimes.now();
+
         String[] startInfo = start.split("-");
         String[] endInfo = end.split("-");
 
         LocalDate targetDate = LocalDate.of(targetTime.getYear(), targetTime.getMonth(), targetTime.getDayOfMonth());
         LocalDate startDate = LocalDate.of(Integer.parseInt(startInfo[0]), Integer.parseInt(startInfo[1]), Integer.parseInt(startInfo[2]));
         LocalDate endDate = LocalDate.of(Integer.parseInt(endInfo[0]), Integer.parseInt(endInfo[1]), Integer.parseInt(endInfo[2]));
-        if (!targetDate.isBefore(startDate) && !targetDate.isAfter(endDate)) {
-            return true;
-        }
-        return false;
+        return !targetDate.isBefore(startDate) && !targetDate.isAfter(endDate);
     }
 
     public boolean isPromotionProduct() {
