@@ -32,7 +32,7 @@ public class OutputView {
         System.out.println("==============W 편의점================");
         System.out.println("상품명\t\t\t\t수량\t\t금액");
         for (Product product : purchaseProducts.getPurchaseProducts()) {
-            System.out.printf("%-4s\t\t\t\t%s\t\t%s\n", product.getName(), product.getQuantity(), product.getQuantity() * product.getPrice());
+            System.out.printf("%-4s\t\t\t\t%s\t\t%s\n", product.getName(), product.getQuantity(), String.format("%,d", product.getQuantity() * product.getPrice()));
         }
     }
 
@@ -47,9 +47,9 @@ public class OutputView {
         System.out.println("====================================");
         System.out.printf("총구매액\t\t\t\t%s\t\t%s", amountInfo.getTotalPurchaseCount(), String.format("%,d", amountInfo.getTotalPurchaseAmount()));
         System.out.println();
-        System.out.printf("행사할인\t\t\t\t\t\t%s", String.format("%,d", amountInfo.getPromotionDiscount() * -1));
+        System.out.printf("행사할인\t\t\t\t\t\t%s", String.format("-%,d", amountInfo.getPromotionDiscount()));
         System.out.println();
-        System.out.printf("멤버십할인\t\t\t\t\t\t%s", String.format("%,d", amountInfo.getMembershipDiscount() * -1));
+        System.out.printf("멤버십할인\t\t\t\t\t\t%s", String.format("-%,d", amountInfo.getMembershipDiscount()));
         System.out.println();
         System.out.printf("내실돈\t\t\t\t\t\t%s", String.format("%,d", amountInfo.getPayment()));
         System.out.println();
