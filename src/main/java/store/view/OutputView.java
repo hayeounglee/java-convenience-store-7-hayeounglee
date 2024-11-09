@@ -22,7 +22,7 @@ public class OutputView {
 
         while ((product = reader.readLine()) != null) {
             String[] str = product.split(",");
-            System.out.printf("- %s %s원 %s개 %s", str[0], String.format("%,d", Integer.parseInt(str[1])), str[2], str[3]); //null은 재고 없음으로 하기
+            System.out.printf("- %s %s원 %s %s", str[0], String.format("%,d", Integer.parseInt(str[1])), changeNoStock(str[2]), changeNull(str[3])); //null은 재고 없음으로 하기
             System.out.println();
         }
         reader.close();
@@ -53,5 +53,19 @@ public class OutputView {
         System.out.println();
         System.out.printf("내실돈\t\t\t\t\t\t%s", String.format("%,d", amountInfo.getPayment()));
         System.out.println();
+    }
+
+    private String changeNull(String input) {
+        if (input.equals("null")) {
+            return "";
+        }
+        return input;
+    }
+
+    private String changeNoStock(String input) {
+        if (input.equals("0")) {
+            return "재고 없음";
+        }
+        return input + "개";
     }
 }
