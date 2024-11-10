@@ -30,9 +30,9 @@ public class StockManageService {
         }
         reader.close();
 
-        if (noStock) {
-            throw new IllegalArgumentException("[ERROR] 재고가 비었습니다.");
-        }
+//        if (noStock) {
+//            throw new IllegalArgumentException("[ERROR] 재고가 비었습니다.");
+//        }
     }
 
     public void manageStock(int countPurchaseNormal, int countPurchasePromotion, Product product) {
