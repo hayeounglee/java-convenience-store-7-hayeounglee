@@ -3,7 +3,6 @@ package store;
 import camp.nextstep.edu.missionutils.test.NsTest;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.time.LocalDate;
 
 import static camp.nextstep.edu.missionutils.test.Assertions.assertNowTest;
