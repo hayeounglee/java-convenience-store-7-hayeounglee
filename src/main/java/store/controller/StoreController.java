@@ -40,6 +40,15 @@ public class StoreController {
         outputView.printStoreMenu();
         repeatUntilProductAndPriceValid();
 
+        calculateProducts();
+        printReceipt();
+
+        if (!repeatUntilAdditionalPlayValid()) {
+            nextPlay = false;
+        }
+    }
+
+    private void calculateProducts() {
         for (Product product : purchaseProducts.getPurchaseProducts()) {
             initCount(product);
             calculateCount(product);
@@ -49,29 +58,17 @@ public class StoreController {
             int stockCount = countPurchasePromotion + countPurchaseNormal;
             receiptService.make(stockCount, giftCount, product);
         }
-        printReceipt();
-
-        if (!repeatUntilAdditionalPlayValid()) {
-            nextPlay = false;
-        }
     }
 
     private void calculateCount(Product product) {
         if (product.isAvailableOnlyPromotion()) {
-            countPurchasePromotion = product.getQuantity();
-
-            if (product.canReceiveMoreFreeGift()) {
-                if (repeatUntilOneMoreFreeValid(product)) {
-                    countPurchasePromotion += 1;
-                    giftCount += 1;
-                    product.increaseQuantity();
-                }
-            }
+            calculatePurchasePromotion(product);
             return;
         }
+        calculatePurchaseBoth(product);
+    }
 
-
-        // 프로모션 제품만으로 안되는 경우 + 같은 경우!!!
+    private void calculatePurchaseBoth(Product product) { // 프로모션 제품만으로 안되는 경우 + 같은 경우!!!
         countPurchasePromotion = product.getPromotionStockCount();
         countPurchaseNormal = product.getQuantity() - countPurchasePromotion;
 
@@ -81,8 +78,18 @@ public class StoreController {
                 countPurchaseNormal = 0;
             }
         }
+    }
 
+    private void calculatePurchasePromotion(Product product) {
+        countPurchasePromotion = product.getQuantity();
 
+        if (product.canReceiveMoreFreeGift()) {
+            if (repeatUntilOneMoreFreeValid(product)) {
+                countPurchasePromotion += 1;
+                giftCount += 1;
+                product.increaseQuantity();
+            }
+        }
     }
 
     private void generateService() {
