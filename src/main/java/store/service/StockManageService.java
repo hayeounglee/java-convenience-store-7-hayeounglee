@@ -24,9 +24,7 @@ public class StockManageService {
 
         while ((line = reader.readLine()) != null) {
             foods.add(line);
-            //System.out.println(line.split(",")[2]);
             if (!line.split(",")[2].equals("0") & !line.split(",")[2].equals("quantity")) {
-                System.out.println(noStock);
                 noStock = false;
             }
         }
