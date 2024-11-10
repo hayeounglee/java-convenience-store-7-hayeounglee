@@ -20,15 +20,24 @@ public class StockManageService {
     public void bringStock() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/products.md"));
         String line;
+        boolean noStock = true;
 
         reader.readLine();
-        if (reader.readLine()==null) {
+        if (reader.readLine() == null) {
             throw new IOException();
         }
 
         while ((line = reader.readLine()) != null) {
             foods.add(line);
+            if (!line.split(",")[2].equals("0")) {
+                noStock = false;
+            }
         }
+
+        if (noStock) {
+            throw new IOException("[ERROR] 재고 문제 발생");
+        }
+
         reader.close();
     }
 

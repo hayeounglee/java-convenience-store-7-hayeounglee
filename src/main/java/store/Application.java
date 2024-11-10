@@ -12,7 +12,7 @@ public class Application {
             StoreController storeController = new StoreController(new InputView(), new OutputView());
             storeController.run();
         } catch (IOException e) {
-            System.out.println("[ERROR] IOException 문제 발생");
+            System.out.println(e.getMessage());
         }
     }
 }
