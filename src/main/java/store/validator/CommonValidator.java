@@ -1,5 +1,4 @@
 package store.validator;
-
 public class CommonValidator {
     public void validateEmpty(String input) {
         if (input.isBlank() || input.isEmpty()) {

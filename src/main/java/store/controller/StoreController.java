@@ -68,11 +68,11 @@ public class StoreController {
         calculatePurchaseBoth(product);
     }
 
-    private void calculatePurchaseBoth(Product product) { // 프로모션 제품만으로 안되는 경우 + 같은 경우!!!
+    private void calculatePurchaseBoth(Product product) {
         countPurchasePromotion = product.getPromotionStockCount();
         countPurchaseNormal = product.getQuantity() - countPurchasePromotion;
 
-        if (product.countPromotionDisable() > 0 & product.isPromotionProduct()) { // 프로모션 혜택을 받지 못하는 수량이 있는 경우
+        if (product.countPromotionDisable() > 0 & product.isPromotionProduct()) {
             if (!repeatUntilPurchaseValid(product)) {
                 countPurchasePromotion = product.buyOnlyPromotion();
                 countPurchaseNormal = 0;
@@ -94,7 +94,7 @@ public class StoreController {
 
     private void generateService() {
         receiptService = new ReceiptService();
-        stockManageService = new StockManageService(); //여기다가 선언해야 하나?
+        stockManageService = new StockManageService();
     }
 
     private void initCount(Product product) {
@@ -109,7 +109,7 @@ public class StoreController {
                 purchaseProducts = new PurchaseProducts(inputView.getProductAndPrice());
                 return;
             } catch (IllegalArgumentException | IOException e) {
-                System.out.println(e.getMessage()); //왜 이렇게 가져와야 하지?
+                System.out.println(e.getMessage());
             }
         }
     }

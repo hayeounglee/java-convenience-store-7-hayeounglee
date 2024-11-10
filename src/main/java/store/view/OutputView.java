@@ -12,17 +12,19 @@ import java.io.IOException;
 
 public class OutputView {
     public void printStoreMenu() throws IOException {
-        System.out.println("안녕하세요. W편의점입니다.\n" +
-                "현재 보유하고 있는 상품입니다.\n");
+        System.out.println("""
+                안녕하세요. W편의점입니다.
+                현재 보유하고 있는 상품입니다.
+                """);
 
-        BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/products.md")); //java 파일 경로 입력방법
+        BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/products.md"));
         String product;
 
         reader.readLine();
 
         while ((product = reader.readLine()) != null) {
             String[] str = product.split(",");
-            System.out.printf("- %s %s원 %s %s", str[0], String.format("%,d", Integer.parseInt(str[1])), changeNoStock(str[2]), changeNull(str[3])); //null은 재고 없음으로 하기
+            System.out.printf("- %s %s원 %s %s", str[0], String.format("%,d", Integer.parseInt(str[1])), changeNoStock(str[2]), changeNull(str[3]));
             System.out.println();
         }
         reader.close();

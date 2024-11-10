@@ -29,11 +29,11 @@ public class Product {
         if (product.isBlank() | product.isEmpty()) {
             throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
         }
-        if (!(product.charAt(0) == '[' && product.charAt(product.length() - 1) == ']' && product.contains("-"))) { //"" vs ''의 차이????? String vs char
+        if (!(product.charAt(0) == '[' && product.charAt(product.length() - 1) == ']' && product.contains("-"))) {
             throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
         }
 
-        product = product.substring(1, product.length() - 1); // 깔끔하게 파악할 수 있게
+        product = product.substring(1, product.length() - 1);
         String[] oneProduct = product.split("-", -1);
 
         for (String one : oneProduct) {
@@ -63,7 +63,7 @@ public class Product {
     }
 
     private boolean isExistProduct(String productName) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/products.md")); //java 파일 경로 입력방법
+        BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/products.md"));
         String food;
         reader.readLine();
 
@@ -82,7 +82,7 @@ public class Product {
     }
 
     private boolean isStockLack(String[] productInfo) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/products.md")); //java 파일 경로 입력방법
+        BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/products.md"));
         String food;
         reader.readLine();
 
@@ -150,8 +150,7 @@ public class Product {
     }
 
     public int getPromotionCount(String promotionName) throws IOException {
-        // if (promotion.equals("null")) return 0;
-        BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/promotions.md")); //java 파일 경로 입력방법
+        BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/promotions.md"));
         String readPromotion;
 
         reader.readLine();
@@ -205,7 +204,7 @@ public class Product {
         return promotionStockCount;
     }
 
-    public int getPromotionGetCount(){
+    public int getPromotionGetCount() {
         return promotionGetCount;
     }
 }

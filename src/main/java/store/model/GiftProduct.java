@@ -2,7 +2,7 @@ package store.model;
 
 public class GiftProduct {
     private final String name;
-    private int quantity;
+    private final int quantity;
 
     public GiftProduct(String productName, int quantity) {
         name = productName;

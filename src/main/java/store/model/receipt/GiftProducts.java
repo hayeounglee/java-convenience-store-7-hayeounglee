@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GiftProducts {
-    private List<GiftProduct> giftProducts;
+    private final List<GiftProduct> giftProducts;
 
     public GiftProducts() {
         giftProducts = new ArrayList<>();

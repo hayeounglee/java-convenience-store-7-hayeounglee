@@ -47,9 +47,6 @@ public class InputView {
             throw new IllegalArgumentException("[ERROR] Y/N를 정확히 입력해주세요");
         }
 
-        if (input.equals("Y")) {
-            return true;
-        }
-        return false;
+        return input.equals("Y");
     }
 }
