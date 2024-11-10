@@ -7,8 +7,12 @@ import store.view.OutputView;
 import java.io.IOException;
 
 public class Application {
-    public static void main(String[] args) throws IOException {
-        StoreController storeController = new StoreController(new InputView(), new OutputView());
-        storeController.run();
+    public static void main(String[] args) {
+        try {
+            StoreController storeController = new StoreController(new InputView(), new OutputView());
+            storeController.run();
+        } catch (IOException e) {
+            System.err.println("An error occurred during input/output: " + e.getMessage());
+        }
     }
 }
