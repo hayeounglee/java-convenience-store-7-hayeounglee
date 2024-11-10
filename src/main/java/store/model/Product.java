@@ -158,7 +158,7 @@ public class Product {
             String[] promotionInfo = readPromotion.split(",");
             if (promotionInfo[0].equals(promotionName) & isValidateDate(promotionInfo[3], promotionInfo[4])) {
                 reader.close();
-                return Integer.parseInt(promotionInfo[1]) + Integer.parseInt(promotionInfo[2]); //각각 parse해야 하나?
+                return Integer.parseInt(promotionInfo[1]) + Integer.parseInt(promotionInfo[2]);
             }
         }
         reader.close();

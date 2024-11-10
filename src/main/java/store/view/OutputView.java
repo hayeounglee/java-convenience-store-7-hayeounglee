@@ -66,6 +66,7 @@ public class OutputView {
         if (input.equals("0")) {
             return "재고 없음";
         }
+        input = String.format("%,d", Integer.parseInt(input));
         return input + "개";
     }
 }
