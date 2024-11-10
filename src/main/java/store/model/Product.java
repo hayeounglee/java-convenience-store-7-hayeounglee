@@ -64,21 +64,25 @@ public class Product {
     }
 
     private boolean isExistProduct(String productName) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/products.md")); //java 파일 경로 입력방법
-        String food;
-        reader.readLine();
-
-        while ((food = reader.readLine()) != null) {
-            String foodName = food.split(",")[0];
-            String foodPrice = food.split(",")[1];
-
-            if (foodName.equals(productName)) {
-                price = Integer.parseInt(foodPrice);
-                reader.close();
-                return true;
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/products.md"))) {
+            String food;
+            reader.readLine(); // Skip header line
+            while ((food = reader.readLine()) != null) {
+                if (updatePrice(food, productName)) {
+                    return true;
+                }
             }
         }
-        reader.close();
+        return false;
+    }
+
+    private boolean updatePrice(String food, String productNAme) {
+        String foodName = food.split(",")[0];
+        String foodPrice = food.split(",")[1];
+        if (foodName.equals(productNAme)) {
+            price = Integer.parseInt(foodPrice);
+            return true;
+        }
         return false;
     }
 
@@ -104,31 +108,31 @@ public class Product {
     }
 
     private void findProductStock(String[] productInfo) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/products.md")); //java 파일 경로 입력방법
-        String food;
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/products.md"))) {
+            String food;
 
-        reader.readLine();
-        while ((food = reader.readLine()) != null) {
-            String foodName = food.split(",")[0];
-            if (foodName.equals(productInfo[0])) {
-                updateStock(food);
+            reader.readLine();
+            while ((food = reader.readLine()) != null) {
+                String[] foodInfo = food.split(",");
+                updateStock(foodInfo, productInfo);
             }
         }
-        reader.close();
     }
 
-    private void updateStock(String food) throws IOException {
-        String foodQuantity = food.split(",")[2];
-        String foodPromotion = food.split(",")[3];
+    private void updateStock(String[] foodInfo, String[] productInfo) throws IOException {
+        String foodName = foodInfo[0];
+        String foodQuantity = foodInfo[2];
+        String foodPromotion = foodInfo[3];
 
-        if (foodPromotion.equals("null")) {
-            normalStockCount += Integer.parseInt(foodQuantity);
-        }//마지막에 수행하는 걸로 수정하는 거 어떤가 싶음
-        promotionCount = getPromotionCount(foodPromotion);
-        if (promotionCount != 0) {
-            promotion = foodPromotion;
-            promotionStockCount += Integer.parseInt(foodQuantity);
-            //return
+        if (foodName.equals(productInfo[0])) {
+            if (foodPromotion.equals("null")) {
+                normalStockCount += Integer.parseInt(foodQuantity);
+            }//마지막에 수행하는 걸로 수정하는 거 어떤가 싶음
+            promotionCount = getPromotionCount(foodPromotion);
+            if (promotionCount != 0) {
+                promotion = foodPromotion;
+                promotionStockCount += Integer.parseInt(foodQuantity);
+            }
         }
     }
 
@@ -172,19 +176,28 @@ public class Product {
     }
 
     public int getPromotionCount(String promotionName) throws IOException {
-        // if (promotion.equals("null")) return 0;
-        BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/promotions.md")); //java 파일 경로 입력방법
-        String readPromotion;
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/promotions.md"))) {
+            String readPromotion;
+            int countPromotion = 0;
 
-        reader.readLine();
-        while ((readPromotion = reader.readLine()) != null) {
-            String[] promotionInfo = readPromotion.split(",");
-            if (promotionInfo[0].equals(promotionName) & isValidateDate(promotionInfo[3], promotionInfo[4])) {
-                reader.close();
-                return Integer.parseInt(promotionInfo[1]) + Integer.parseInt(promotionInfo[2]); //각각 parse해야 하나?
+            reader.readLine();
+            while ((readPromotion = reader.readLine()) != null) {
+                countPromotion = getValidatePromotion(readPromotion.split(","), promotionName);
             }
+            return countPromotion;
         }
-        reader.close();
+    }
+
+    private int getValidatePromotion(String[] promotionInfo, String promotionName) {
+        String name = promotionInfo[0];
+        int buy = Integer.parseInt(promotionInfo[1]);
+        int get = Integer.parseInt(promotionInfo[2]);
+        String startDate = promotionInfo[3];
+        String endDate = promotionInfo[4];
+
+        if (name.equals(promotionName) & isValidateDate(startDate, endDate)) {
+            return buy + get;
+        }
         return 0;
     }
 
