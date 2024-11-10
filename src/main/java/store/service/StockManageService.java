@@ -21,6 +21,11 @@ public class StockManageService {
         BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/products.md"));
         String line;
 
+        reader.readLine();
+        if (reader.readLine()==null) {
+            throw new IOException();
+        }
+
         while ((line = reader.readLine()) != null) {
             foods.add(line);
         }
