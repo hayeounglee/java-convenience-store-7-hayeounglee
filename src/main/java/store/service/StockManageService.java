@@ -25,16 +25,17 @@ public class StockManageService {
         while ((line = reader.readLine()) != null) {
             foods.add(line);
             //System.out.println(line.split(",")[2]);
-            if (!line.split(",")[2].equals("0")) {
+            if (!line.split(",")[2].equals("0") & !line.split(",")[2].equals("quantity")) {
+                System.out.println(noStock);
                 noStock = false;
             }
         }
         reader.close();
-//
-//        System.out.println(noStock);
-//        if (noStock) {
-//            throw new IOException("[ERROR] 재고가 비었습니다.");
-//        }
+
+
+        if (noStock) {
+            throw new IOException("[ERROR] 재고가 비었습니다.");
+        }
     }
 
     public void manageStock(int countPurchaseNormal, int countPurchasePromotion, Product product) {
