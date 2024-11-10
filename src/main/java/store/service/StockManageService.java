@@ -32,9 +32,8 @@ public class StockManageService {
         }
         reader.close();
 
-
         if (noStock) {
-            throw new IOException("[ERROR] 재고가 비었습니다.");
+            throw new IllegalArgumentException("[ERROR] 재고가 비었습니다.");
         }
     }
 
