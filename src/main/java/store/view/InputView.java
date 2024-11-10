@@ -23,7 +23,7 @@ public class InputView {
     }
 
     public boolean getOneMoreFree(Product product) {
-        System.out.printf("\n현재 %s은(는) 1개를 무료로 더 받을 수 있습니다. 추가하시겠습니까? (Y/N)", product.getName());
+        System.out.printf("\n현재 %s은(는) %d개를 무료로 더 받을 수 있습니다. 추가하시겠습니까? (Y/N)", product.getName(), product.getPromotionGetCount());
         System.out.println();
         return getYesOrNo();
     }

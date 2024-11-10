@@ -85,9 +85,9 @@ public class StoreController {
 
         if (product.canReceiveMoreFreeGift()) {
             if (repeatUntilOneMoreFreeValid(product)) {
-                countPurchasePromotion += 1;
-                giftCount += 1;
-                product.increaseQuantity();
+                countPurchasePromotion += product.getPromotionGetCount();
+                giftCount += product.getPromotionGetCount();
+                product.increaseQuantity(product.getPromotionGetCount());
             }
         }
     }

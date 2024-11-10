@@ -16,6 +16,8 @@ public class Product {
     private int normalStockCount = 0;
     private String promotion = "null";
     private int promotionCount = 0;
+    private int promotionBuyCount = 0;
+    private int promotionGetCount = 0;
 
     public Product(String product) throws IOException {
         String[] productInfo = validate(product);
@@ -141,8 +143,8 @@ public class Product {
     public boolean canReceiveMoreFreeGift() {
         if (promotionCount == 0) return false;
         int remainProduct = quantity % promotionCount;
-        if (remainProduct == (promotionCount - 1)) {
-            return (promotionStockCount - quantity) >= 1;
+        if (remainProduct == (promotionBuyCount)) {
+            return (promotionStockCount - quantity) >= promotionGetCount;
         }
         return false;
     }
@@ -157,6 +159,8 @@ public class Product {
         while ((readPromotion = reader.readLine()) != null) {
             String[] promotionInfo = readPromotion.split(",");
             if (promotionInfo[0].equals(promotionName) & isValidateDate(promotionInfo[3], promotionInfo[4])) {
+                promotionBuyCount = Integer.parseInt(promotionInfo[1]);
+                promotionGetCount = Integer.parseInt(promotionInfo[2]);
                 reader.close();
                 return Integer.parseInt(promotionInfo[1]) + Integer.parseInt(promotionInfo[2]);
             }
@@ -181,8 +185,8 @@ public class Product {
         return !promotion.equals("null");
     }
 
-    public void increaseQuantity() {
-        quantity += 1;
+    public void increaseQuantity(int promotionGetCount) {
+        quantity += promotionGetCount;
     }
 
     public String getName() {
@@ -199,5 +203,9 @@ public class Product {
 
     public int getPromotionStockCount() {
         return promotionStockCount;
+    }
+
+    public int getPromotionGetCount(){
+        return promotionGetCount;
     }
 }
