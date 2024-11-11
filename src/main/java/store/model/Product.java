@@ -12,17 +12,27 @@ public class Product {
     private final String name;
     private int quantity;
     private int price;
-    private int promotionStockCount = 0;
-    private int normalStockCount = 0;
-    private String promotion = "null";
-    private int promotionCount = 0;
-    private int promotionBuyCount = 0;
-    private int promotionGetCount = 0;
+    private int promotionStockCount;
+    private int normalStockCount;
+    private String promotion;
+    private int promotionCount;
+    private int promotionBuyCount;
+    private int promotionGetCount;
 
     public Product(String product) throws IOException {
+        initCount();
         String[] productInfo = validate(product);
         name = productInfo[0];
         quantity = Integer.parseInt(productInfo[1]);
+    }
+
+    private void initCount() {
+        promotionStockCount = 0;
+        normalStockCount = 0;
+        promotion = "null";
+        promotionCount = 0;
+        promotionBuyCount = 0;
+        promotionGetCount = 0;
     }
 
     private String[] validate(String product) throws IOException {
@@ -48,11 +58,11 @@ public class Product {
         try {
             Integer.parseInt(oneProduct[1]);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("[ERROR] 수량은 숫자를 입력해야합니다. 다시 입력해 주세요.");
+            throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
         }
 
         if (Integer.parseInt(oneProduct[1]) <= 0) {
-            throw new IllegalArgumentException("[ERROR] 수량은 1이상의 숫자를 입력해야 합니다. 다시 입력해 주세요.");
+            throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
         }
 
         if (!isExistProduct(oneProduct[0])) {
@@ -172,7 +182,7 @@ public class Product {
                 promotionBuyCount = Integer.parseInt(promotionInfo[1]);
                 promotionGetCount = Integer.parseInt(promotionInfo[2]);
                 reader.close();
-                return Integer.parseInt(promotionInfo[1]) + Integer.parseInt(promotionInfo[2]);
+                return promotionBuyCount + promotionGetCount;
             }
         }
         reader.close();

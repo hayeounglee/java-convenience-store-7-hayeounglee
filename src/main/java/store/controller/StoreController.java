@@ -64,17 +64,17 @@ public class StoreController {
 
     private void calculateCount(Product product) {
         if (product.isAvailableOnlyPromotion()) {
-            calculatePurchasePromotion(product);
+            calculateCaseOne(product);
             return;
         }
         if (product.isSameWithQuantity()) {
-            calculatePurchase(product);
+            calculateCaseTwo(product);
             return;
         }
-        calculatePurchaseBoth(product);
+        calculateCaseThree(product);
     }
 
-    private void calculatePurchaseBoth(Product product) {
+    private void calculateCaseThree(Product product) {
         countPurchasePromotion = product.getPromotionStockCount();
         countPurchaseNormal = product.getQuantity() - countPurchasePromotion;
 
@@ -87,7 +87,7 @@ public class StoreController {
         }
     }
 
-    private void calculatePurchase(Product product) {
+    private void calculateCaseTwo(Product product) {
         countPurchasePromotion = product.getQuantity();
 
         if (product.countPromotionDisable() > 0 & product.isPromotionProduct()) {
@@ -98,7 +98,7 @@ public class StoreController {
         }
     }
 
-    private void calculatePurchasePromotion(Product product) {
+    private void calculateCaseOne(Product product) {
         countPurchasePromotion = product.getQuantity();
 
         if (product.canReceiveMoreFreeGift()) {
