@@ -108,7 +108,7 @@ public class StoreController {
 
         if (product.countPromotionDisable() > 0 & product.isPromotionProduct()) {
             if (!repeatUntilPurchaseValid(product)) {
-                countPurchasePromotion = 0;
+                countPurchasePromotion = product.buyOnlyPromotion();
             }
             getBenefit = false;
         }
