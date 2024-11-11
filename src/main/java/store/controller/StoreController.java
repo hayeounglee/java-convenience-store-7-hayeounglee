@@ -13,7 +13,7 @@ public class StoreController {
     private final InputView inputView;
     private final OutputView outputView;
 
-    private boolean nextPlay = true;
+    private boolean nextPlay;
     private PurchaseProducts purchaseProducts;
     private ReceiptService receiptService;
     private StockManageService stockManageService;
@@ -26,6 +26,7 @@ public class StoreController {
     public StoreController(InputView inputView, OutputView outputView) {
         this.inputView = inputView;
         this.outputView = outputView;
+        nextPlay = true;
     }
 
     public void run() throws IOException {
@@ -36,9 +37,14 @@ public class StoreController {
 
     private void play() throws IOException {
         generateService();
-        stockManageService.bringStock();
+        boolean noStock = stockManageService.bringStock();
 
         outputView.printStoreMenu();
+
+        if(noStock){
+            throw new IllegalArgumentException("[ERROR]");
+        }
+
         repeatUntilProductAndPriceValid();
 
         calculateProducts();

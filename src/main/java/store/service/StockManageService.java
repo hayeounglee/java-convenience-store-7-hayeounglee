@@ -17,7 +17,7 @@ public class StockManageService {
         foods = new ArrayList<>();
     }
 
-    public void bringStock() throws IOException {
+    public boolean bringStock() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/products.md"));
         String line;
         boolean noStock = true;
@@ -30,9 +30,7 @@ public class StockManageService {
         }
         reader.close();
 
-//        if (noStock) {
-//            throw new IllegalArgumentException("[ERROR] 재고가 비었습니다.");
-//        }
+        return noStock;
     }
 
     public void manageStock(int countPurchaseNormal, int countPurchasePromotion, Product product) {

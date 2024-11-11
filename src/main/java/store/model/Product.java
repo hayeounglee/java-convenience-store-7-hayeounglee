@@ -125,14 +125,6 @@ public class Product {
         return 0;
     }
 
-//    private int countDisableStock() {
-//        if (promotionCount == 0) return 0;
-//        int stock = promotionStockCount % promotionCount;
-//        if (stock == promotionBuyCount) {
-//            return stock;
-//        }
-//    }
-
     public int buyOnlyPromotion() {
         quantity = promotionStockCount - decreasePromotionStock();
         return quantity;
