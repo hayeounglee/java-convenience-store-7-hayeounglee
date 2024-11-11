@@ -64,7 +64,7 @@ public class StoreController {
 
     private void calculateCount(Product product) {
         if (!product.isPromotionDuration()) { //프로모션 기간이 아닐 때
-            if(product.isPromotionProduct()){
+            if (product.isPromotionProduct()) {
                 getBenefit = false;
             }
 
@@ -101,23 +101,17 @@ public class StoreController {
             }
             getBenefit = false;
         }
-//        if (!product.isPromotionDuration() & product.isPromotionProduct()) {
-//            getBenefit = false;
-//        }
     }
 
     private void calculateCaseTwo(Product product) {
         countPurchasePromotion = product.getQuantity();
 
-        if (product.countPromotionDisable() > 0 & product.isPromotionProduct()) {//프로모션 기간, 프로모션 적용 가능
+        if (product.countPromotionDisable() > 0 & product.isPromotionProduct()) {
             if (!repeatUntilPurchaseValid(product)) {
                 countPurchasePromotion = 0;
             }
             getBenefit = false;
         }
-//        if (!product.isPromotionDuration() & product.isPromotionProduct()) {
-//            getBenefit = false;
-//        }
     }
 
     private void calculateCaseOne(Product product) {
@@ -132,9 +126,6 @@ public class StoreController {
             }
             getBenefit = false;
         }
-//        if (!product.isPromotionDuration() & product.isPromotionProduct()) {
-//            getBenefit = false;
-//        }
     }
 
     private void generateService() {
