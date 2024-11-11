@@ -13,10 +13,10 @@ public class ReceiptService {
         giftProducts = new GiftProducts();
     }
 
-    public void make(int stockCount, int giftCount, Product product) {
+    public void make(int stockCount, int giftCount, Product product, boolean getBenefit) {
         amountInfo.increaseTotal(stockCount, product.getPrice());
         amountInfo.calculatePromotionDiscount(product, giftCount);
-        amountInfo.increaseMembershipDiscount(product, giftCount);
+        amountInfo.increaseMembershipDiscount(product, giftCount, getBenefit);
 
         giftProducts.storeGiftProduct(product, giftCount);
     }

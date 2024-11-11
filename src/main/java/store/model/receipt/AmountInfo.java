@@ -43,11 +43,9 @@ public class AmountInfo {
         membershipDiscount = Math.min(membershipDiscount, (int)MembershipDiscount.MAX_DISCOUNT.getValue());
     }
 
-    public void increaseMembershipDiscount(Product product, int giftCount) {
-
-        if (giftCount == 0) {
+    public void increaseMembershipDiscount(Product product, int giftCount, boolean getBenefit) {
+        if (giftCount == 0 & getBenefit) {
             membershipDiscount += product.getPrice() * product.getQuantity();
-
         }
     }
 

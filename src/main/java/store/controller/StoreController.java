@@ -21,6 +21,7 @@ public class StoreController {
     private int countPurchasePromotion;
     private int countPurchaseNormal;
     private int giftCount;
+    private boolean getBenefit = true;
 
     public StoreController(InputView inputView, OutputView outputView) {
         this.inputView = inputView;
@@ -57,7 +58,7 @@ public class StoreController {
 
             int stockCount = countPurchasePromotion + countPurchaseNormal;
 
-            receiptService.make(stockCount, giftCount, product);
+            receiptService.make(stockCount, giftCount, product, getBenefit);
         }
     }
 
@@ -89,7 +90,9 @@ public class StoreController {
                 countPurchasePromotion += product.getPromotionGetCount();
                 giftCount += product.getPromotionGetCount();
                 product.increaseQuantity(product.getPromotionGetCount());
+                return;
             }
+            getBenefit= false;
         }
     }
 
