@@ -56,6 +56,7 @@ public class StoreController {
             stockManageService.manageStock(countPurchaseNormal, countPurchasePromotion, product);
 
             int stockCount = countPurchasePromotion + countPurchaseNormal;
+
             receiptService.make(stockCount, giftCount, product);
         }
     }

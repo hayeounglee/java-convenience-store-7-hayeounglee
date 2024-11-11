@@ -44,8 +44,10 @@ public class AmountInfo {
     }
 
     public void increaseMembershipDiscount(Product product, int giftCount) {
+
         if (giftCount == 0) {
             membershipDiscount += product.getPrice() * product.getQuantity();
+
         }
     }
 

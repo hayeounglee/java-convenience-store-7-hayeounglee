@@ -29,6 +29,9 @@ public class Product {
         if (product.isBlank() | product.isEmpty()) {
             throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
         }
+
+        product = product.replaceAll("\\s", "");
+
         if (!(product.charAt(0) == '[' && product.charAt(product.length() - 1) == ']' && product.contains("-"))) {
             throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
         }
@@ -115,8 +118,20 @@ public class Product {
     }
 
     public int countPromotionDisable() {
-        return decreasePromotionStock() + decreaseNormalStock();
+        int count = decreasePromotionStock() + decreaseNormalStock();
+        if (count >= promotionBuyCount) {
+            return count;
+        }
+        return 0;
     }
+
+//    private int countDisableStock() {
+//        if (promotionCount == 0) return 0;
+//        int stock = promotionStockCount % promotionCount;
+//        if (stock == promotionBuyCount) {
+//            return stock;
+//        }
+//    }
 
     public int buyOnlyPromotion() {
         quantity = promotionStockCount - decreasePromotionStock();
