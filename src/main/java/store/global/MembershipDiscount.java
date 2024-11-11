@@ -1,4 +1,4 @@
-package store.constant;
+package store.global;
 
 public enum MembershipDiscount {
     MAX_DISCOUNT(8000),
