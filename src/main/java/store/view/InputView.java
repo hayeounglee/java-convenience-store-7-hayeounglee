@@ -48,9 +48,8 @@ public class InputView {
         String input = Console.readLine();
         commonInputValidator.validateEmpty(input);
         if (!input.equals("Y") & !input.equals("N")) {
-            throw new IllegalArgumentException("[ERROR] Y/N를 정확히 입력해주세요");
+            throw new IllegalArgumentException("[ERROR] 잘못된 입력입니다. 다시 입력해 주세요.");
         }
-
         return input.equals("Y");
     }
 }
