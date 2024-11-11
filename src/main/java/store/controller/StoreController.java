@@ -81,10 +81,12 @@ public class StoreController {
             calculateCaseOne(product);
             return;
         }
+
         if (product.isSameWithQuantity()) {
             calculateCaseTwo(product);
             return;
         }
+
         calculateCaseThree(product);
     }
 
@@ -92,30 +94,30 @@ public class StoreController {
         countPurchasePromotion = product.getPromotionStockCount();
         countPurchaseNormal = product.getQuantity() - countPurchasePromotion;
 
-        if (product.countPromotionDisable() > 0 & product.isPromotionDuration()) {
+        if (product.countPromotionDisable() > 0 & product.isPromotionProduct()) {
             if (!repeatUntilPurchaseValid(product)) {
                 countPurchasePromotion = product.buyOnlyPromotion();
                 countPurchaseNormal = 0;
             }
             getBenefit = false;
         }
-        if (!product.isPromotionDuration() & product.isPromotionProduct()) {
-            getBenefit = false;
-        }
+//        if (!product.isPromotionDuration() & product.isPromotionProduct()) {
+//            getBenefit = false;
+//        }
     }
 
     private void calculateCaseTwo(Product product) {
         countPurchasePromotion = product.getQuantity();
 
-        if (product.countPromotionDisable() > 0 & product.isPromotionDuration()) {//프로모션 기간, 프로모션 적용 가능
+        if (product.countPromotionDisable() > 0 & product.isPromotionProduct()) {//프로모션 기간, 프로모션 적용 가능
             if (!repeatUntilPurchaseValid(product)) {
                 countPurchasePromotion = 0;
             }
             getBenefit = false;
         }
-        if (!product.isPromotionDuration() & product.isPromotionProduct()) {
-            getBenefit = false;
-        }
+//        if (!product.isPromotionDuration() & product.isPromotionProduct()) {
+//            getBenefit = false;
+//        }
     }
 
     private void calculateCaseOne(Product product) {
@@ -130,9 +132,9 @@ public class StoreController {
             }
             getBenefit = false;
         }
-        if (!product.isPromotionDuration() & product.isPromotionProduct()) {
-            getBenefit = false;
-        }
+//        if (!product.isPromotionDuration() & product.isPromotionProduct()) {
+//            getBenefit = false;
+//        }
     }
 
     private void generateService() {
