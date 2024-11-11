@@ -41,7 +41,8 @@ public class OutputView {
     public void printGiftProducts(GiftProducts giftProducts) {
         System.out.println("=============증\t\t정===============");
         for (GiftProduct giftProduct : giftProducts.getGiftProducts()) {
-            System.out.printf("%-4s\t\t\t\t%d\n", giftProduct.getName(), giftProduct.getQuantity());
+            System.out.printf("%-4s\t\t\t\t%d", giftProduct.getName(), giftProduct.getQuantity());
+            System.out.println();
         }
     }
 

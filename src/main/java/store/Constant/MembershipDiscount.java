@@ -1,4 +1,4 @@
-package store.Constant;
+package store.constant;
 
 public enum MembershipDiscount {
     MAX_DISCOUNT(8000),

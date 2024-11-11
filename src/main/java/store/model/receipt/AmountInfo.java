@@ -1,6 +1,6 @@
 package store.model.receipt;
 
-import store.Constant.MembershipDiscount;
+import store.constant.MembershipDiscount;
 import store.model.Product;
 
 import java.text.DecimalFormat;

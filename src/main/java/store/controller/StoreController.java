@@ -21,7 +21,7 @@ public class StoreController {
     private int countPurchasePromotion;
     private int countPurchaseNormal;
     private int giftCount;
-    private boolean getBenefit = true;
+    private boolean getBenefit;
 
     public StoreController(InputView inputView, OutputView outputView) {
         this.inputView = inputView;
@@ -102,6 +102,7 @@ public class StoreController {
     }
 
     private void initCount(Product product) {
+        getBenefit = true;
         countPurchasePromotion = 0;
         countPurchaseNormal = 0;
         giftCount = product.getGiftCount();

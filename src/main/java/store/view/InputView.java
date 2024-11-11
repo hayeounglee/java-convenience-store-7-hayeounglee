@@ -5,7 +5,11 @@ import store.model.Product;
 import store.validator.CommonValidator;
 
 public class InputView {
-    private final CommonValidator commonInputValidator = new CommonValidator();
+    private final CommonValidator commonInputValidator;
+
+    public InputView() {
+        commonInputValidator = new CommonValidator();
+    }
 
     public String getProductAndPrice() {
         System.out.println("\n구매하실 상품명과 수량을 입력해 주세요. (예: [사이다-2],[감자칩-1])");
