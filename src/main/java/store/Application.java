@@ -12,7 +12,7 @@ public class Application {
             StoreController storeController = new StoreController(new InputView(), new OutputView());
             storeController.run();
         } catch (IOException | IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            System.out.println("[ERROR] " + e.getMessage());
         }
     }
 }
