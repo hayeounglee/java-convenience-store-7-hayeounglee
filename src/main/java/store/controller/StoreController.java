@@ -78,11 +78,14 @@ public class StoreController {
         countPurchasePromotion = product.getPromotionStockCount();
         countPurchaseNormal = product.getQuantity() - countPurchasePromotion;
 
-        if (product.countPromotionDisable() > 0 & product.isPromotionProduct()) {
+        if (product.countPromotionDisable() > 0 & product.isPromotionDuration()) {
             if (!repeatUntilPurchaseValid(product)) {
                 countPurchasePromotion = product.buyOnlyPromotion();
                 countPurchaseNormal = 0;
             }
+            getBenefit = false;
+        }
+        if (!product.isPromotionDuration() & product.isPromotionProduct()) {
             getBenefit = false;
         }
     }
@@ -90,10 +93,13 @@ public class StoreController {
     private void calculateCaseTwo(Product product) {
         countPurchasePromotion = product.getQuantity();
 
-        if (product.countPromotionDisable() > 0 & product.isPromotionProduct()) {
+        if (product.countPromotionDisable() > 0 & product.isPromotionDuration()) {//프로모션 기간, 프로모션 적용 가능
             if (!repeatUntilPurchaseValid(product)) {
                 countPurchasePromotion = 0;
             }
+            getBenefit = false;
+        }
+        if (!product.isPromotionDuration() & product.isPromotionProduct()) {
             getBenefit = false;
         }
     }
@@ -101,13 +107,16 @@ public class StoreController {
     private void calculateCaseOne(Product product) {
         countPurchasePromotion = product.getQuantity();
 
-        if (product.canReceiveMoreFreeGift()) {
+        if (product.canReceiveMoreFreeGift()) { //프로모션 기간, 프로모션 적용 가능
             if (repeatUntilOneMoreFreeValid(product)) {
                 countPurchasePromotion += product.getPromotionGetCount();
                 giftCount += product.getPromotionGetCount();
                 product.increaseQuantity(product.getPromotionGetCount());
                 return;
             }
+            getBenefit = false;
+        }
+        if (!product.isPromotionDuration() & product.isPromotionProduct()) {
             getBenefit = false;
         }
     }

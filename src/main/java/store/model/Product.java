@@ -105,9 +105,9 @@ public class Product {
             String foodPromotion = food.split(",")[3];
 
             if (foodName.equals(productInfo[0]) & !foodPromotion.equals("null")) {
-                promotionCount = getPromotionCount(foodPromotion);
+                promotionCount = getPromotionCount(foodPromotion); // 0이라는 것은 프로모션 기간이 아님
+                promotion = foodPromotion; //프로모션 제품
                 if (promotionCount != 0) {
-                    promotion = foodPromotion;
                     promotionStockCount += Integer.parseInt(foodQuantity);
                 }
             }
@@ -203,6 +203,9 @@ public class Product {
 
     public boolean isPromotionProduct() {
         return !promotion.equals("null");
+    }
+    public boolean isPromotionDuration(){
+        return promotionCount!=0;
     }
 
     public void increaseQuantity(int promotionGetCount) {
