@@ -37,16 +37,10 @@ public class StoreController {
 
     private void play() throws IOException {
         generateService();
-        boolean noStock = stockManageService.bringStock();
+        stockManageService.bringStock();
 
         outputView.printStoreMenu();
-
-        if(noStock){
-            throw new IllegalArgumentException("[ERROR]");
-        }
-
         repeatUntilProductAndPriceValid();
-
         calculateProducts();
         printReceipt();
 
@@ -73,6 +67,10 @@ public class StoreController {
             calculatePurchasePromotion(product);
             return;
         }
+        if (product.isSameWithQuantity()) {
+            calculatePurchase(product);
+            return;
+        }
         calculatePurchaseBoth(product);
     }
 
@@ -85,6 +83,18 @@ public class StoreController {
                 countPurchasePromotion = product.buyOnlyPromotion();
                 countPurchaseNormal = 0;
             }
+            getBenefit = false;
+        }
+    }
+
+    private void calculatePurchase(Product product) {
+        countPurchasePromotion = product.getQuantity();
+
+        if (product.countPromotionDisable() > 0 & product.isPromotionProduct()) {
+            if (!repeatUntilPurchaseValid(product)) {
+                countPurchasePromotion = 0;
+            }
+            getBenefit = false;
         }
     }
 
@@ -98,7 +108,7 @@ public class StoreController {
                 product.increaseQuantity(product.getPromotionGetCount());
                 return;
             }
-            getBenefit= false;
+            getBenefit = false;
         }
     }
 

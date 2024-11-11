@@ -117,6 +117,10 @@ public class Product {
         return promotionStockCount > quantity;
     }
 
+    public boolean isSameWithQuantity() {
+        return promotionStockCount == quantity;
+    }
+
     public int countPromotionDisable() {
         int count = decreasePromotionStock() + decreaseNormalStock();
         if (count >= promotionBuyCount) {
