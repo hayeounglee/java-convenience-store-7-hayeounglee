@@ -18,6 +18,7 @@ public class Product {
     private int promotionCount;
     private int promotionBuyCount;
     private int promotionGetCount;
+    private int justPromotionStockCount;
 
     public Product(String product) throws IOException {
         initCount();
@@ -110,12 +111,13 @@ public class Product {
                 if (promotionCount != 0) {
                     promotionStockCount += Integer.parseInt(foodQuantity);
                 }
+                justPromotionStockCount = Integer.parseInt(foodQuantity);
             }
             if (foodName.equals(productInfo[0]) & foodPromotion.equals("null")) {
                 normalStockCount += Integer.parseInt(foodQuantity);
             }
         }
-        if (promotionStockCount + normalStockCount < Integer.parseInt(productInfo[1])) {
+        if (justPromotionStockCount + normalStockCount < Integer.parseInt(productInfo[1])) {
             reader.close();
             return true;
         }
@@ -230,5 +232,9 @@ public class Product {
 
     public int getPromotionGetCount() {
         return promotionGetCount;
+    }
+
+    public int getNormalStockCount(){
+        return normalStockCount;
     }
 }

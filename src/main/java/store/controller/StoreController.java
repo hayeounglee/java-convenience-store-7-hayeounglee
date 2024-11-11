@@ -63,6 +63,16 @@ public class StoreController {
     }
 
     private void calculateCount(Product product) {
+        if (!product.isPromotionDuration()) { //프로모션 기간이 아닐 때
+            if (product.getNormalStockCount() >= product.getQuantity()) {
+                countPurchaseNormal = product.getQuantity();
+                return;
+            }
+            countPurchaseNormal = product.getNormalStockCount();
+            countPurchasePromotion = product.getQuantity() - countPurchaseNormal;
+            return;
+        }
+
         if (product.isAvailableOnlyPromotion()) {
             calculateCaseOne(product);
             return;
